@@ -41,6 +41,25 @@
   nav a{color:var(--dim);text-decoration:none;font-size:13px;font-weight:600;
     transition:color .2s}
   nav a:hover{color:var(--lime)}
+  .burger{display:none;background:none;border:1px solid var(--line);border-radius:10px;
+    width:42px;height:42px;cursor:pointer;padding:0}
+  .burger span{display:block;width:18px;height:2px;background:var(--ink);margin:4px auto;
+    transition:transform .25s, opacity .25s}
+  .burger.open span:nth-child(1){transform:translateY(6px) rotate(45deg)}
+  .burger.open span:nth-child(2){opacity:0}
+  .burger.open span:nth-child(3){transform:translateY(-6px) rotate(-45deg)}
+
+  @media(max-width:760px){
+    .burger{display:block}
+    nav .wrap{height:58px}
+    nav ul{position:absolute;top:58px;left:0;right:0;display:none;flex-direction:column;
+      gap:0;background:rgba(7,8,12,.96);backdrop-filter:blur(16px);
+      border-bottom:1px solid var(--line);padding:10px 24px 20px}
+    nav ul.open{display:flex}
+    nav ul li a{display:block;padding:13px 0;font-size:15px;border-bottom:1px solid var(--line)}
+    nav ul li:last-child a{border:none}
+    nav ul a::after{display:none}
+  }
 
   /* ===== hero ===== */
   .hero{position:relative;z-index:1;padding:110px 0 70px}
@@ -107,6 +126,21 @@
   .b.violet .stat-hero{color:var(--violet)}
   @media(max-width:860px){.big,.w3{grid-column:span 6}.w2{grid-column:span 3}}
   @media(max-width:560px){.w2{grid-column:span 6}.bento{gap:12px}.b{padding:24px}}
+
+  /* ===== responsive mobile ===== */
+  @media(max-width:760px){
+    section{padding:68px 0}
+    .hero{padding:72px 0 56px}
+    h1{font-size:clamp(38px,10.5vw,52px)}
+    h2{font-size:clamp(28px,7.5vw,36px)}
+    .hero p{font-size:17px}
+    .b .stat-hero{font-size:clamp(48px,14vw,64px)}
+    .final{padding:88px 0 100px}
+    .final h2{font-size:clamp(30px,8.5vw,42px)}
+    .tl{padding-left:28px}
+    .shield{padding:20px}
+    .marquee{padding:13px 0}
+  }
 
   /* ===== duel ===== */
   .duel{display:grid;grid-template-columns:1fr 1fr;gap:16px}
@@ -213,7 +247,10 @@
 <nav>
   <div class="wrap">
     <div class="logo">ANEWS<b>→</b>STRAPI</div>
-    <ul>
+    <button class="burger" id="burger" aria-label="Ouvrir le menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+    <ul id="nav-list">
       <li><a href="#pourquoi">Avantages</a></li>
       <li><a href="#duel">Wix vs Strapi</a></li>
       <li><a href="#archi">Architecture</a></li>
@@ -225,6 +262,7 @@
 
 <header class="hero">
   <div class="wrap">
+    <div class="tagline"><span class="dot"></span>PROPOSITION TECHNIQUE — ANEWS.COM.CO</div>
     <h1>Le média qui relie<br/><span class="out">l'Afrique au monde</span><br/>mérite <span class="hl">mieux que Wix.</span></h1>
     <p>ANews a le fond : les interviews, les reportages, la légitimité. Ce qui manque, c'est la plateforme. <b>Strapi + Railway + Cloudflare</b>, c'est le triptyque technique qui transforme un site vitrine Wix lent et invisible en média <b>rapide, référencé et 100 % maîtrisé</b>.</p>
     <div class="cta-row">
@@ -395,8 +433,14 @@
   <div class="wrap">
     <h2>ANews a le fond.<br/>Donnons-lui la <em>forme</em> qu'il mérite.</h2>
     <p style="margin-bottom:36px">Ce site répond au besoin identifié par l'audit : moderniser la plateforme pour transformer une valeur éditoriale forte en audience réelle. Prochaine étape : une réunion de cadrage d'une heure — valider la méthode, désigner un référent rédaction, lancer la phase 1.</p>
+    <a class="btn btn-p" href="mailto:leboueelie@gmail.com">Planifier la réunion de cadrage →</a>
+    <p style="margin-top:28px;font-size:14px;color:var(--dim)">LEBOUE Elie · Développeur & Consultant en Stratégie Numérique · <a href="mailto:leboueelie@gmail.com" style="color:var(--lime)">leboueelie@gmail.com</a> · +225 01 41 84 68 60</p>
   </div>
 </section>
+
+<footer>
+  LEBOUE Elie — Développeur & Consultant en Stratégie Numérique · <a href="mailto:leboueelie@gmail.com">leboueelie@gmail.com</a> · +225 01 41 84 68 60
+</footer>
 
 <script>
   // Effet spotlight au survol des cartes bento
@@ -429,6 +473,20 @@
     });
   }, { rootMargin: '-40% 0px -55% 0px' });
   secs.forEach(s => navIO.observe(s));
+
+  // Menu mobile
+  const burger = document.getElementById('burger');
+  const navList = document.getElementById('nav-list');
+  burger.addEventListener('click', () => {
+    const open = navList.classList.toggle('open');
+    burger.classList.toggle('open', open);
+    burger.setAttribute('aria-expanded', open);
+  });
+  navList.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+    navList.classList.remove('open');
+    burger.classList.remove('open');
+    burger.setAttribute('aria-expanded', 'false');
+  }));
 </script>
 
 </body>
